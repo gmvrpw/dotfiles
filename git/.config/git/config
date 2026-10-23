@@ -1,0 +1,7 @@
+[user]
+	email = dev@gmvr.pw
+	name = Aleksandr Boiarnikov
+[commit]
+	gpgsign = true
+[init]
+	defaultBranch = main

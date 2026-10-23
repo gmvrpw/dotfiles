@@ -1,0 +1,35 @@
+[tools]
+node = "latest"
+"npm:jsvu" = "latest"
+
+# Language toolchains
+go = "latest"
+rust = { version = "stable", components = "rust-analyzer,rustfmt" }
+flutter = "latest"
+
+# Language servers for nvim
+"npm:typescript" = "latest"
+"npm:typescript-language-server" = "latest"
+"npm:vscode-langservers-extracted" = "latest"
+"npm:pyright" = "latest"
+"npm:@actions/languageserver" = "latest"
+"npm:cssmodules-language-server" = { version = "latest", allow_low_downloads = true }
+"npm:css-variables-language-server" = { version = "latest", allow_low_downloads = true }
+"npm:stylelint-lsp" = { version = "latest", allow_low_downloads = true }
+"go:golang.org/x/tools/gopls" = "latest"
+"conda:jdtls" = "latest"
+lua-language-server = "latest"
+"github:latex-lsp/texlab" = "latest"
+
+# Formatters for nvim
+prettier = "latest"
+stylua = "latest"
+golines = "latest"
+google-java-format = "latest"
+superhtml = "latest"
+"pipx:autopep8" = "latest"
+
+[settings]
+# Honor project version files: .nvmrc/.node-version, .go-version, rust-toolchain.toml,
+# .java-version/.sdkmanrc
+idiomatic_version_file_enable_tools = ["node", "go", "rust", "java"]

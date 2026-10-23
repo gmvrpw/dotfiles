@@ -1,0 +1,36 @@
+#!/bin/sh
+# hypridle-switch - restart hypridle with the AC or battery profile on charger (un)plug.
+#
+# Usage: hypridle-switch <ac-config> <battery-config>
+#
+# hypridle has no power-conditional listeners, so we keep two configs and restart the
+# daemon with the right one whenever the power source changes.
+
+AC_CFG="${1:?usage: hypridle-switch <ac-config> <battery-config>}"
+BAT_CFG="${2:?usage: hypridle-switch <ac-config> <battery-config>}"
+
+# On mains power? (only real type=Mains adapters - ignore mouse/USB-C power supplies)
+on_ac() {
+    for ps in /sys/class/power_supply/*; do
+        [ "$(cat "$ps/type" 2>/dev/null)" = "Mains" ] || continue
+        [ "$(cat "$ps/online" 2>/dev/null)" = "1" ] && return 0
+    done
+    return 1
+}
+
+current=""
+apply() {
+    if on_ac; then new=ac; cfg="$AC_CFG"; else new=bat; cfg="$BAT_CFG"; fi
+    [ "$new" = "$current" ] && return          # state unchanged -> leave it alone
+    current="$new"
+    pkill -x hypridle 2>/dev/null
+    sleep 0.3
+    hypridle -c "$cfg" >/dev/null 2>&1 &
+}
+
+apply # apply on session start
+
+# React to charger (un)plug without polling and without upower.
+udevadm monitor --udev --subsystem-match=power_supply 2>/dev/null | while read -r _; do
+    apply
+done
